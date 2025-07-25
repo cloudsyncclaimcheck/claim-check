@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: claimcheck
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: GOOGLE_API_KEY
+        value: YOUR_GOOGLE_API_KEY
+      - key: GOOGLE_CX_ID
+        value: YOUR_GOOGLE_CX_ID
+      - key: OPENAI_API_KEY
+        value: YOUR_OPENAI_API_KEY
