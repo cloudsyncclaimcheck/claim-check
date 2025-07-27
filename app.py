@@ -242,10 +242,6 @@ def admin_stats():
     verdict_data = load_verdict_log()
     return render_template('admin_stats.html', verdict_data=verdict_data)
 
-@app.route('/admin/stats')
-def admin_stats():
-    verdict_data = load_verdict_log()
-    return render_template('admin_stats.html', verdict_data=verdict_data)
 
 if __name__ == '__main__':
     app.run(debug=True,port=5001)
