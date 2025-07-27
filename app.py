@@ -223,7 +223,7 @@ def feedback():
 from flask import Response, request, render_template
 import os
 
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "Weshalldie!")  # fallback value
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")  # fallback value
 
 def check_auth(password):
     return password == ADMIN_PASSWORD
