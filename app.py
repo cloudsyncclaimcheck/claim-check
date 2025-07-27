@@ -130,7 +130,7 @@ def index():
 @app.route('/check', methods=['POST'])
 def check():
     statement = request.form['statement']
-    if len(statement) > 500:
+    if len(statement) > 510:
         return render_template(
             'result.html',
             results=[{
@@ -244,6 +244,17 @@ def admin_stats():
     verdict_data = load_verdict_log()
     return render_template('admin_stats.html', verdict_data=verdict_data)
 
+@app.route('/pro')
+def pro():
+    return render_template('pro.html')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
 
 
 if __name__ == '__main__':
