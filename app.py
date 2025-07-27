@@ -220,6 +220,28 @@ def feedback():
 
     return redirect('/')
 
+from flask import Response
+
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "Weshalldie1!")  # or use .env
+
+def check_auth(password):
+    return password == ADMIN_PASSWORD
+
+def authenticate():
+    return Response(
+        "Access Denied: Invalid password\n", 401,
+        {"WWW-Authenticate": 'Basic realm="Login Required"'}
+    )
+
+@app.route('/admin/stats')
+def admin_stats():
+    password = request.args.get('auth')
+    if not check_auth(password):
+        return authenticate()
+
+    verdict_data = load_verdict_log()
+    return render_template('admin_stats.html', verdict_data=verdict_data)
+
 @app.route('/admin/stats')
 def admin_stats():
     verdict_data = load_verdict_log()
