@@ -239,7 +239,7 @@ def authenticate():
 def admin_stats():
     password = request.args.get('auth')
     if not check_auth(password):
-        return authenticate()
+        return authenticate(),403
 
     verdict_data = load_verdict_log()
     return render_template('admin_stats.html', verdict_data=verdict_data)
