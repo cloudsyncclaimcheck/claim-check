@@ -46,25 +46,36 @@ def write_usage(today, count, data):
 
 
 def load_verdict_log():
-    if not VERDICT_LOG_PATH.exists():
-        return {}
-    with open(VERDICT_LOG_PATH, "r") as f:
-        return json.load(f)
+    conn = sqlite3.connect("verdicts.db")
+    c = conn.cursor()
+    c.execute("SELECT date, verdict, count FROM verdict_counts")
+    rows = c.fetchall()
+    conn.close()
+
+    data = {}
+    for date, verdict, count in rows:
+        if date not in data:
+            data[date] = {}
+        data[date][verdict] = count
+    return data
+
+
+import sqlite3
 
 def increment_verdict_count(verdict):
     today = datetime.now().strftime("%Y-%m-%d")
-    data = load_verdict_log()
+    conn = sqlite3.connect("verdicts.db")
+    c = conn.cursor()
 
-    if today not in data:
-        data[today] = {}
+    c.execute("""
+    INSERT INTO verdict_counts (date, verdict, count)
+    VALUES (?, ?, 1)
+    ON CONFLICT(date, verdict)
+    DO UPDATE SET count = count + 1
+    """, (today, verdict))
 
-    if verdict not in data[today]:
-        data[today][verdict] = 0
-
-    data[today][verdict] += 1
-
-    with open(VERDICT_LOG_PATH, "w") as f:
-        json.dump(data, f)
+    conn.commit()
+    conn.close()
 
 
 def search_google(query):
